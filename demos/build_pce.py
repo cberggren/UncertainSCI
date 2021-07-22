@@ -5,6 +5,9 @@ from itertools import chain, combinations
 import numpy as np
 from matplotlib import pyplot as plt
 
+import sys
+sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
+
 from UncertainSCI.distributions import BetaDistribution
 from UncertainSCI.model_examples import laplace_grid_x, laplace_ode, KLE_exponential_covariance_1d
 from UncertainSCI.indexing import TotalDegreeSet

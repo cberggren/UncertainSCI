@@ -65,7 +65,7 @@ dimension = 4
 # (alpha=beta=1 ---> uniform)
 alpha = 1.
 beta = 1.
-dist = BetaDistribution(alpha=alpha, beta=beta, dim=dimension)
+dist = BetaDistribution(alpha=alpha, beta=beta, dim=dimension, domain=) # domain contains matrix w/ bounds of parameters
 
 # # Expressivity setup
 # Expressivity determines what order of polynomial to use when emulating
@@ -112,7 +112,8 @@ pce.build(model) # model_output = modelOutput (FEBio input parameters). See line
 
 # The parameter samples and model evaluations are accessible:
 
-parameter_samples = pce.samples
+parameter_samples = pce.samples # FEBio parameters we'll want to look at will go here. 
+
 model_evaluations = pce.model_output
 # this means you could run the samples through a model function offline, and return
 # the outputs to the pce seperatly. See the example file ??.py for more information
