@@ -5,10 +5,6 @@ from itertools import chain, combinations
 import numpy as np
 from matplotlib import pyplot as plt
 
-# point to UncertainSCI
-import sys
-sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
-
 from UncertainSCI.distributions import BetaDistribution
 from UncertainSCI.model_examples import laplace_grid_x, laplace_ode, KLE_exponential_covariance_1d
 from UncertainSCI.indexing import TotalDegreeSet
@@ -19,10 +15,8 @@ from UncertainSCI.pce import PolynomialChaosExpansion
 # - The expressivity of the PCE (polynomial space)
 # - The physical model
 
-# %% Distribution setup
-"""
-Describe setup of parameter distribution
-"""
+# # Distribution setup
+
 # Number of parameters
 dimension = 3
 
@@ -66,8 +60,7 @@ x = laplace_grid_x(left, right, N)
 # model = sine_modulation(N=N)
 model = laplace_ode(left=left, right=right, N=N, diffusion=diffusion)
 
-# %% Building the PCE
-
+# # Building the PCE
 # Generate samples first, then manually query model, then give model output to pce.
 pce = PolynomialChaosExpansion(index_set, dist)
 pce.generate_samples()
@@ -95,7 +88,7 @@ model_evaluations = pce.model_output
 # # pce and pce2 have the same coefficients:
 #  np.linalg.norm( pce.coefficients - pce2.coefficients )
 
-# %% Postprocess PCE: mean, stdev, sensitivities, quantiles
+# # Postprocess PCE: mean, stdev, sensitivities, quantiles
 mean = pce.mean()
 stdev = pce.stdev()
 
@@ -117,7 +110,7 @@ quantile_levels = np.append(np.concatenate((q_lower, q_upper)), 0.5)
 quantiles = pce.quantile(quantile_levels, M=int(2e3))
 median = quantiles[-1, :]
 
-# %% For comparison: Monte Carlo statistics
+# # For comparison: Monte Carlo statistics
 M = 1000  # Generate MC samples
 p_phys = dist.MC_samples(M)
 output = np.zeros([M, N])
@@ -130,8 +123,7 @@ MC_stdev = np.std(output, axis=0)
 MC_quantiles = np.quantile(output, quantile_levels, axis=0)
 MC_median = quantiles[-1, :]
 
-# %% Visualization
-
+# # Visualization
 V = 50  # Number of MC samples to visualize
 
 # mean +/- stdev plot

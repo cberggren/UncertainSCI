@@ -107,8 +107,7 @@ print('This will query the model {0:d} times'.format(pce.samples.shape[0]))
 # this next step can be run in a number of ways, the simplest is done here
 # by providing the pce with our model function. the pce will then query the model
 # function at the samples and generate the appropriate statsitcs
-
-pce.build(model) # model_output = modelOutput (FEBio input parameters). See line 76 in build_pce.
+pce.build(model)
 
 # The parameter samples and model evaluations are accessible:
 
