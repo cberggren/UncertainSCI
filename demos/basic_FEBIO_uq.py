@@ -5,6 +5,10 @@ from itertools import chain, combinations
 import numpy as np
 from matplotlib import pyplot as plt
 
+# point to UncertainSCI
+import sys
+sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
+
 from UncertainSCI.distributions import BetaDistribution
 from UncertainSCI.model_examples import laplace_grid_x, laplace_ode, KLE_exponential_covariance_1d
 from UncertainSCI.indexing import TotalDegreeSet
@@ -20,7 +24,7 @@ sensitivities, model standard deviation and mean outputs are calculated and disp
 
 #########################
 '''
-# # We start by defining our model:
+# %% We start by defining our model:
 #
 # f(x) = p0 sin(p1 * x + p2) +p3
 #
@@ -60,14 +64,14 @@ def modelFunction(p,x,paramBounds):
 #This model has four input parameters so we set the dimensionality to 4
 dimension = 4
 
-# # Next we specify the distribution we expect for our input parameters.
+# %% Next we specify the distribution we expect for our input parameters.
 # In this case we assume a uniform distribution from 0 to 1 for each parameter
 # (alpha=beta=1 ---> uniform)
 alpha = 1.
 beta = 1.
 dist = BetaDistribution(alpha=alpha, beta=beta, dim=dimension, domain=) # domain contains matrix w/ bounds of parameters
 
-# # Expressivity setup
+# %% Expressivity setup
 # Expressivity determines what order of polynomial to use when emulating
 # our model function. This is a tuneable hyper parameter, however UncertainSCI
 # also has the cabability to auto determine this value. 
@@ -75,7 +79,7 @@ order = 5
 index_set = TotalDegreeSet(dim=dimension, order=order)
 
 
-# # Next we want to define the specific values for this instance of our model
+# %% Next we want to define the specific values for this instance of our model
 # this step will depend ont he specific model and what it takes as inputs. In our case
 # our model needs to know wthat the x value(s) is/are and what are the bounds on our
 # parameters
@@ -97,7 +101,7 @@ bounds = [0.5, 1,\
 # function handle for the model can be used instead of a lambda function
 model = lambda p: modelFunction(p,x = xVals,paramBounds=bounds)
 
-# # Building the PCE
+# %% Building the PCE
 #  First provide the indicies and distribution
 pce = PolynomialChaosExpansion(index_set, dist)
 # Next generate the samples that you want to query
@@ -118,7 +122,7 @@ model_evaluations = pce.model_output
 # this means you could run the samples through a model function offline, and return
 # the outputs to the pce seperatly. See the example file ??.py for more information
 
-# # Postprocess PCE: mean, stdev, sensitivities, quantiles
+# %% Postprocess PCE: mean, stdev, sensitivities, quantiles
 mean = pce.mean()
 stdev = pce.stdev()
 
@@ -130,7 +134,7 @@ variable_interactions = list(chain.from_iterable(combinations(range(dimension), 
 global_sensitivity = pce.global_sensitivity(variable_interactions)
 
 
-# # Visualization
+# %% Visualization
 V = 100 # Generate Monte Carlo samples for comparison
 p_mc = dist.MC_samples(V)
 output = np.zeros([V, len(xVals)])
