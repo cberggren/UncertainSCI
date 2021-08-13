@@ -78,7 +78,7 @@ file = 'Quarter_cylinder_' + stiffness_label + '_parameters_v1'
 f_path = folder + '\\' + file +'.txt' # construct file path
 units = 'kPa'
 
-# Write file
+# Write query set file
 with open(f_path, 'w',newline='') as f:
     # Write header
     csv.writer(f, delimiter=',').writerow([dist_label])
@@ -88,7 +88,8 @@ with open(f_path, 'w',newline='') as f:
     # Write samples to query
     csv.writer(f, delimiter=',').writerows(samples)
 
-
+# %% Analysis
+model_evaluations = pce.model_output # feed in FEBio output
 
 
 
