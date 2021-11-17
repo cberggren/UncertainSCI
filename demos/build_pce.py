@@ -5,6 +5,10 @@ from itertools import chain, combinations
 import numpy as np
 from matplotlib import pyplot as plt
 
+# point to UncertainSCI
+import sys
+sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
+
 from UncertainSCI.distributions import BetaDistribution
 from UncertainSCI.model_examples import laplace_grid_x, laplace_ode, KLE_exponential_covariance_1d
 from UncertainSCI.indexing import TotalDegreeSet
@@ -62,7 +66,8 @@ model = laplace_ode(left=left, right=right, N=N, diffusion=diffusion)
 
 # # Building the PCE
 # Generate samples first, then manually query model, then give model output to pce.
-pce = PolynomialChaosExpansion(index_set, dist)
+pce = PolynomialChaosExpansion(
+    , dist)
 pce.generate_samples()
 
 print('This will query the model {0:d} times'.format(pce.samples.shape[0]))
@@ -70,6 +75,8 @@ print('This will query the model {0:d} times'.format(pce.samples.shape[0]))
 model_output = np.zeros([pce.samples.shape[0], N])
 for ind in range(pce.samples.shape[0]):
     model_output[ind, :] = model(pce.samples[ind, :])
+print(model_output)
+print(pce.samples.shape)
 pce.build(model_output=model_output)
 
 # Alternatively, you can just provide the whole model:

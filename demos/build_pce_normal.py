@@ -3,6 +3,10 @@ from itertools import chain, combinations
 import numpy as np
 from matplotlib import pyplot as plt
 
+# point to UncertainSCI
+import sys
+sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
+
 from UncertainSCI.distributions import NormalDistribution
 from UncertainSCI.model_examples import sine_modulation
 from UncertainSCI.indexing import TotalDegreeSet

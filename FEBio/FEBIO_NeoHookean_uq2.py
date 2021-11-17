@@ -4,22 +4,23 @@ import numpy as np
 from numpy import array_str
 from matplotlib import pyplot as plt
 import csv
+from scipy import stats
 
 # point to UncertainSCI
 import sys
 sys.path.append("C:\\Users\\cbergrgren\\GitHub\\UncertainSCI")
 
-from UncertainSCI.distributions import BetaDistribution
+from UncertainSCI.distributions import BetaDistribution,UniformDistribution,NormalDistribution
 from UncertainSCI.model_examples import laplace_grid_x, laplace_ode, KLE_exponential_covariance_1d
 from UncertainSCI.indexing import TotalDegreeSet
 from UncertainSCI.pce import PolynomialChaosExpansion
-from UncertainSCI.distributions import NormalDistribution
 
 '''
 #########################
 Description: Generate list of Neo-Hookean parameters to run as a set of FEBio models
 Author: Caleb Berggren
 Date: 8-12-21
+Version changes: View distribution
 #########################
 '''
 
@@ -41,15 +42,27 @@ cov = np.square(s)
 dist = NormalDistribution(mean=c1,cov=cov)
 dist_label = NormalDistribution.__name__
 
-# # View distribution
-# print("The mean of this distribution is")
-# print(np.array2string(mu))
-# print("\nThe covariance matrix of this distribution is")
-# print(np.array2string(cov))
+# Create beta distribution to match
+a = 4
+clim = s*a
+bounds = np.reshape(np.array([c1-clim,c1+clim]), [2, 1])
+aa = 8.3
+distB = BetaDistribution(alpha=aa,beta=aa,domain=bounds)
+distN = NormalDistribution(mean=c1,cov=cov)
 
-# M = 100
-# x = np.linspace(domain[0], domain[1],M)
-# pdf = dist.pdf(x)
+x = np.linspace(bounds[0,0], bounds[1,0], 100) # define array of c1 to visualize
+X = np.meshgrid(x)
+X = np.vstack([X]).T
+pdf = distB.pdf(X)
+
+# View distribution
+y = stats.norm.pdf(x,c1,s)
+fig, ax = plt.subplots(figsize=(9,6))
+ax.plot(x,y)
+ax.set_title('c1 distributions')
+ax.set_xlabel('c1 [kPa]')
+ax.plot(x,pdf)
+ax.legend(['Normal','Beta'])
 
 # %% Expressivity setup
 # Expressivity determines what order of polynomial to use when emulating
