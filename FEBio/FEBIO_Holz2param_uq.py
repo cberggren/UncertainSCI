@@ -80,8 +80,8 @@ x = np.linspace(bounds[0,1], bounds[0,1], 100) # define array of c1 to visualize
 y = stats.norm.pdf(x,med_u,med_uSD)
 fig, ax = plt.subplots(figsize=(100,100))
 ax.plot(x,y)
-ax.set_title('c1 distributions')
-ax.set_xlabel('c1 [kPa]')
+ax.set_title('mu distributions')
+ax.set_xlabel('mu [kPa]')
 ax.plot(x,y)
 ax.legend(['Normal','Beta'])
 
@@ -100,7 +100,7 @@ plt.title('PDF for a bivariate "normal" distribution of material parameters')
 plt.show()
 
 Hp = np.array([med_u, med_k1]) # Holzapfel parameters
-labels = ['c', 'k1']
+labels = ['mu', 'k1']
 
 # %% Initialize for loop, variables
 
