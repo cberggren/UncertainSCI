@@ -93,7 +93,9 @@ pdf = np.reshape(pdf, [M, M])
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 surf = ax.plot_surface(X, Y, pdf, cmap=cm.coolwarm)
 fig.colorbar(surf)
-plt.title('PDF for a bivariate "normal" distribution')
+ax.set_xlabel('c1')
+ax.set_ylabel('k1')
+plt.title('PDF for a bivariate "normal" distribution of material parameters')
 
 plt.show()
 
@@ -112,7 +114,7 @@ labels = ['c', 'k1']
 # Expressivity determines what order of polynomial to use when emulating
 # our model function. This is a tuneable hyper parameter, however UncertainSCI
 # also has the cabability to auto determine this value. 
-order = 10
+order = 5 # PCE order
 index_set = TotalDegreeSet(dim=dim, order=order)
 
 # %% Building the PCE
