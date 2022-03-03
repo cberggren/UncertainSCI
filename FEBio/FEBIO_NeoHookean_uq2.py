@@ -103,9 +103,18 @@ if save == 1:
         # Write samples to query
         csv.writer(f, delimiter=',').writerows(samples)
 
+# %% Run model in Matlab
+import matlab.engine
+eng = matlab.engine.start_matlab()
+# savePath=r'C:\Users\cbergrgren\Box\UQ\FEBio'
+savePath=r'..\FEBio'
+wrTxt = 1 # write stress output to txt
+Parameter_space_Matlab = eng.UQ_BatchPy(savePath,matlab.double(samples.tolist()),wrTxt) # converting to matlab array
+Parameter_space_matrix = np.asarray(Parameter_space_Matlab)
+print(Parameter_space_matrix)
+
 # %% Analysis
 # model_evaluations = pce.model_output # feed in FEBio output
-
 
 
 

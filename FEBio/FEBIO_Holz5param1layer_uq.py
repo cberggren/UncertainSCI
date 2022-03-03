@@ -29,7 +29,7 @@ Date: 9-20-21
 '''
 
 plt.close('all')
-save = 1 # == 1, save file
+write_txt = 1 # == 1, write text file for manual running of FEBio models in Matlab
 
 # %% Fit distributions
 # From Holzapfel et al., 2005 (https://doi.org/10.1152/ajpheart.00934.2004)
@@ -83,13 +83,16 @@ print(f1.summary())
 # f3.set_dpi(150)
 
 # %% Specify input parameter distribution
-# Inputs
-# - c: ground matrix stiffness (mu= c/2, c = 2*mu)
-# - k1: stress-like parameter for fibers
+# Inputs (ORDER MATTERS)
+# - mu: ground matrix stiffness (mu= c1/2, c1 = 2*mu) [kPa]. NOTE: FEBio uses c1, Holz 05 paper uses mu. 
+# - k1: fiber "modulus", a stress-like parameter for fibers [kPa]
+# - k2: fiber exponential coefficient (unitless)
+# - rho: fiber dispersion (unitless)
+# - phi: fiber mean orientation angle [deg]
 
 dim = 2
 # Define distribution across domain
-med_u = 1.27
+med_u = 1.27*2 # Holz paper reports mu = 1.27
 med_uSD = np.array(0.25) # standard deviation of c
 med_uCov = np.square(med_uSD) # covariance of c
 lim_M = 4 # plotting limit mulitplier
@@ -188,7 +191,7 @@ print("Min, max of",labels[1],":" , min(samples[:,1]),',', max(samples[:,1]))
 print('\n')
 print('This will query the model {0:d} times'.format(pce.samples.shape[0]))
 
-if save == 1:
+if write_txt == 1:
     # File names
     now = datetime.now() # Get datetime string
     date_time = now.strftime("y%ym%md%dh%Hm%M")
@@ -214,6 +217,23 @@ if save == 1:
         csv.writer(f, delimiter=',').writerow(['--------------------------'])
         # Write samples to query
         csv.writer(f, delimiter=',').writerows(samples)
+        
+# %% Run model in Matlab
+import matlab.engine
+eng = matlab.engine.start_matlab()
+import io
+out = io.StringIO()
+err = io.StringIO()
+
+savePath=r'C:\Users\cbergrgren\Box\UQ\FEBio'
+wrTxt = 1 # write stress output to txt
+Parameter_space_Matlab = eng.UQ_BatchPy(savePath,matlab.double(samples.tolist()),wrTxt,stdout=out,stderr=err) # converting to matlab array
+print(out.getvalue())
+print(err.getvalue())
+eng.quit() # quit Matlab
+
+Parameter_space_matrix = np.asarray(Parameter_space_Matlab)
+print(Parameter_space_matrix)
 
 # %% Analysis
 # model_evaluations = pce.model_output # feed in FEBio output
